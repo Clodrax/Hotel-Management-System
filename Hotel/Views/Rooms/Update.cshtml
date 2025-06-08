@@ -1,0 +1,106 @@
+﻿@model Room
+<div class="row">
+    <div class="col-9">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"></h5>
+
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <div class="mb-3 form-group">
+                            <label>Current Image</label>
+                            <div>
+                                <img src="~/../../images/room/@Model.Image" alt="Current Image" style="width:100px; height:100px; border-radius:100px;" />
+                            </div>
+                        </div>
+                    }
+                    <div class="mb-3 form-group">
+                        <label asp-for="Photo" class="form-label">Photo</label>
+                        <input asp-for="Photo" accept="image/*" class="form-control" />
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label asp-for="Name" class="form-label">Room Number</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Room Type</label>
+                        <select class="form-control" name="CatId">
+                            @foreach (RoomType cat in ViewBag.RoomTypes)
+                            {
+                                if (Model.RoomTypesId == cat.Id)
+                                {
+                                    <option selected value="@cat.Id">@cat.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@cat.Id">@cat.Name</option>
+
+                                }
+                            }
+
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Booking Status</label>
+                        <select class="form-control" name="GatId">
+                            @foreach (var bookingStatus in ViewBag.BookingStatus)
+                            {
+                                bool isSelected = Model.BookingRooms != null && Model.BookingRooms.Any(br => br.BookingStatusId == bookingStatus.Id);
+
+                                if (isSelected)
+                                {
+                                    <option value="@bookingStatus.Id" selected>@bookingStatus.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@bookingStatus.Id">@bookingStatus.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <a asp-action="Index" class="btn btn-danger">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function validatePhoneNumber(input) {
+        const phoneNumberPattern = /^\(\d{3}\) \d{2}-\d{3}-\d{2}-\d{2}$/;
+        const phoneNumber = input.value.trim();
+        const errorSpan = input.nextElementSibling;
+
+
+        if (phoneNumber.includes(' ')) {
+
+            input.value = phoneNumber.replace(/\s+/g, '');
+        }
+
+
+        if (!phoneNumberPattern.test(phoneNumber)) {
+            errorSpan.textContent = "Number format is not true";
+        } else {
+            errorSpan.textContent = "";
+        }
+    }
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

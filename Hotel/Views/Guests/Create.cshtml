@@ -1,0 +1,93 @@
+﻿@model Guest
+
+<div class="row">
+    <div class="col-9">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Add Guest</h5>
+                <div class="mb-0 text-danger" asp-validation-summary="ModelOnly"></div>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3 form-group">
+                        <label asp-for="Photo" class="form-label">Photo</label>
+                        <input asp-for="Photo" accept="image/*" class="form-control" />
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label asp-for="Name" class="form-label">Fullname</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input type="email" asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Room Number</label>
+                        <select class="form-control" name="CatId">
+                            @foreach (SelectListItem room in ViewBag.Rooms)
+                            {
+                                <option value="@room.Value">@room.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="daterange" class="form-label">Select Date Range</label>
+                        <input type="text" id="daterange" name="daterange" class="form-control" />
+                        <span asp-validation-for="ArrivalDate" class="text-danger"></span>
+                        <span asp-validation-for="DepartureDate" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" id="ArrivalDate" name="ArrivalDate" asp-for="ArrivalDate" />
+                    <input type="hidden" id="DepartureDate" name="DepartureDate" asp-for="DepartureDate" />
+
+                    <button type="submit" class="btn btn-primary">Add Guest</button>
+                    <a asp-action="Index" class="btn btn-danger">Back</a>
+                </form>
+
+                @section Scripts {
+                    <partial name="_ValidationScriptsPartial" />
+
+                    <script>
+                        $(function () {
+                            $('#daterange').daterangepicker({
+                                locale: {
+                                    format: 'YYYY-MM-DD'
+                                },
+                                startDate: moment().startOf('day'),
+                                endDate: moment().add(1, 'days').startOf('day')
+                            }, function (start, end, label) {
+                                $('#ArrivalDate').val(start.format('YYYY-MM-DD'));
+                                $('#DepartureDate').val(end.format('YYYY-MM-DD'));
+                            });
+
+                            // Initialize hidden inputs with initial dates
+                            var initialStartDate = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
+                            var initialEndDate = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                            $('#ArrivalDate').val(initialStartDate);
+                            $('#DepartureDate').val(initialEndDate);
+                        });
+
+                    </script>
+                    <!-- Include Bootstrap CSS if not already included -->
+                    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+                    <!-- Include daterangepicker CSS -->
+                    <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet">
+
+                    <!-- Include jQuery -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <!-- Include moment.js -->
+                    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+                    <!-- Include daterangepicker JS -->
+                    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+                }

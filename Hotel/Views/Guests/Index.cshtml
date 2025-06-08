@@ -1,0 +1,116 @@
+﻿@model List<Guest>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header" style="display:flex;justify-content:space-between">
+                <h3>
+                    Guests
+                </h3>
+                <div>
+                    <a asp-action="Create" class="btn btn-danger text-white rounded-pill" style="margin-right:10px">Add Guest</a>
+                    <a class="btn btn-info text-white rounded-pill" style="margin-right:10px" asp-action="SendAllGuestsSms">Send email to all</a>
+
+                </div>
+            </div>
+            <div class="table-responsive">
+
+                <table id="myTable" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Fullname</th>
+                            <th>Room Number & Price</th>
+                            <th>Status</th>
+                            <th class="no-export">Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Guest item in Model)
+                        {
+                            <tr>
+                                <td>   <img src="@Url.Content($"~/images/guest/{item.Image}")" alt="image" style="width:100px; height:100px; border-radius:100px;" /></td>
+                                <td>@item.Name</td>
+                                <td style="text-align: center;">
+                                    <div style="display: inline-block; text-align: left;">
+                                        <div>No @item.Rooms.Name</div>
+                                        <div>@(item.Payment)₼</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (!item.IsRefunded)
+                                    {
+                                        @if (item.IsPaid)
+                                        {
+                                            <span style="padding:1px 2px; background-color:green;color:white">Paid</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="padding:1px 2px; background-color:red;color:white">Unpaid</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span style="padding:1px 2px; background-color:red;color:white">Refunded</span>
+                                    }
+
+                                </td>
+                                <td class="no-export">
+                                    <div @*style="display:flex;justify-content:flex-end"*@>
+                                        <a class="btn btn-warning text-white rounded-pill" style="margin-right:10px" asp-action="SendGuestsSms" asp-route-id="@item.Id">Email</a>
+                                        <a class="btn btn-info text-white rounded-pill" style="margin-right:10px" asp-action="Detail" asp-route-id="@item.Id">Information</a>
+                                        <a class="btn btn-info text-white rounded-pill" style="margin-right:10px" asp-action="Update" asp-route-id="@item.Id">Change</a>
+
+                                        @if (item.IsPaid)
+                                        {
+                                            <a class="btn btn-success text-white rounded-pill" style="margin-right:30px;width:100px">Checked In</a>
+
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-danger text-white rounded-pill" style="margin-right:30px;width:100px" asp-action="Payment" asp-route-id="@item.Id">Pending</a>
+                                            <a class="btn btn-danger text-white rounded-pill" style="margin-right:30px;width:100px;margin-left:30px" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                                        }
+
+                                        @if (item.IsRefunded)
+                                        {
+                                            <a class="btn btn-danger text-white rounded-pill" style="margin-right:30px;width:100px;margin-left:30px" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        }
+                                       
+                                        else if(item.IsPaid)
+                                        {
+                                            <a class="btn btn-danger text-white rounded-pill" style="margin-right:30px;width:100px;margin-left:30px" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                                            <div style="display:flex; justify-content:end">
+                                                <a class="btn btn-dark text-white rounded-pill" style="width:100px; margin-right:30px" asp-action="Refund" asp-route-id="@item.Id">Refund</a>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Css {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <!-- DataTable yalnız bir dəfə yaradıldığından əmin olmaq üçün əlavə şərt -->
+    <script src="~/js/dtExport.js"></script>
+}

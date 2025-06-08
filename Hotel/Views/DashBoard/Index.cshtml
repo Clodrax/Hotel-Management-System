@@ -1,0 +1,106 @@
+﻿@model List<Room>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div style="text-align:center; height:600px;height:500px" class="brand-logo">
+                <img src="../../images/hotel.png" alt="logo"style="height:500px;width:700px">
+             </div>
+           @*  <div class="card-header" style="display:flex; justify-content:center">
+                <h1 style="background-color:#4b49ac; color:white; font-size:xx-large;">
+                   Management System Of Hotel
+                </h3> 
+               
+            </div> 
+            <div class="table-responsive" style="margin-top:10px">
+
+                <table id="myTable" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Room Number</th>
+                            <th>Booking Status</th>
+                            <th>Room Type</th>
+                            <th>Status</th>
+                           
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Room item in Model)
+                        {
+                            <tr>
+                                <td>  <img src="~/../../images/room/@item.Image" alt="image" style="width:100px ;height:100px; border-radius:100px" /></td>
+                                <td>@item.Name</td>
+                                <td>
+                                    @foreach (BookingRoom bookingRoom in item.BookingRooms)
+                                    {
+                                        <div>@bookingRoom.BookingStatus.Name</div>
+
+                                    }
+                                </td>
+                                <td>@item.RoomTypes.Name</td>
+
+
+
+                                <td>
+                                    @if (item.IsDeactive)
+                                    {
+                                        <span style="padding:1px 2px; background-color:red;color:white">Deactive</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="padding:1px 2px; background-color:green;color:white">Active</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div> *@
+            @* <div class="d-flex justify-content-center mt-3">
+                <nav aria-label="...">
+                    <ul class="pagination flex-wrap">
+                        @if (ViewBag.Page != 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.Page-1)">Geri</a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= ViewBag.PageCount; i++)
+                        {
+                            <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@i">@i</a></li>
+                        }
+
+                        @if (ViewBag.Page != ViewBag.PageCount)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.Page+1)">İrəli</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div> *@
+        </div>
+    </div>
+</div>
+@section css{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.datatables.min.css" />
+    
+}
+
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.datatables.min.js"></script>
+    
+
+    <!-- datatable yalnız bir dəfə yaradıldığından əmin olmaq üçün əlavə şərt -->
+    <script>
+
+        let table = new datatable('#mydash');
+      
+    </script>
+}
+ 
